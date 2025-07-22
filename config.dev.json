@@ -152,10 +152,10 @@
     "listenTyping": true,
     "logLevel": "error",
     "selfListen": true,
-    "selfListenEvent": true,
-    "autoMarkDelivery": true,
+    "selfListenEvent": false,
+    "autoMarkDelivery": false,
     "autoReconnect": true,
-    "online": true,
+    "online": false,
     "notes": "Document here: https://github.com/ntkhang03/fb-chat-api/blob/master/DOCS.md#apisetoptionsoptions "
   }
 }
