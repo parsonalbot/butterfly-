@@ -20,7 +20,7 @@ module.exports = {
   langs: {
     en: {
       helpHeader: "╔══════════◇◆◇══════════╗\n"
-                + "      BOT COMMAND LIST\n"
+                + "  𝗕𝗨𝗧𝗧𝗘𝗥𝗙𝗟𝗬 𝗖𝗢𝗠𝗠𝗔𝗡𝗗 𝗟𝗜𝗦𝗧\n"
                 + "╠══════════◇◆◇══════════╣",
       categoryHeader: "\n   ┌────── {category} ──────┐\n",
       commandItem: "║ │ 🟢 {name}",
@@ -48,7 +48,7 @@ module.exports = {
       roleText1: "👑 Group Admins",
       roleText2: "⚡ Bot Admins",
       totalCommands: "📊 Total Commands: {total}\n"
-                  + "xnil"
+                  + "𝐘𝐞𝐚𝐬𝐢𝐧"
     }
   },
 
@@ -56,7 +56,13 @@ module.exports = {
     const { threadID } = event;
     const prefix = getPrefix(threadID);
     const commandName = args[0]?.toLowerCase();
-    const bannerPath = path.join(__dirname, "assets", "20250319_111041.png");
+
+    const replyWithAutoUnsend = async (msg) => {
+      const sentMsg = await message.reply(msg);
+      setTimeout(() => {
+        message.unsend(sentMsg.messageID);
+      }, 30 * 1000); // 30 seconds
+    };
 
     if (commandName === 'c' && args[1]) {
       const categoryArg = args[1].toUpperCase();
@@ -71,7 +77,7 @@ module.exports = {
       }
 
       if (commandsInCategory.length === 0) {
-        return message.reply(`❌ No commands found in category: ${categoryArg}`);
+        return replyWithAutoUnsend(`❌ No commands found in category: ${categoryArg}`);
       }
 
       let replyMsg = this.langs.en.helpHeader;
@@ -84,7 +90,7 @@ module.exports = {
       replyMsg += this.langs.en.helpFooter;
       replyMsg += "\n" + this.langs.en.totalCommands.replace(/{total}/g, commandsInCategory.length);
 
-      return message.reply(replyMsg);
+      return replyWithAutoUnsend(replyMsg);
     }
 
     if (!commandName || commandName === 'all') {
@@ -119,24 +125,12 @@ module.exports = {
 
       replyMsg += "\n" + this.langs.en.totalCommands.replace(/{total}/g, totalCommands);
 
-      try {
-        if (fs.existsSync(bannerPath)) {
-          return message.reply({
-            body: replyMsg,
-            attachment: fs.createReadStream(bannerPath)
-          });
-        } else {
-          return message.reply(replyMsg);
-        }
-      } catch (e) {
-        console.error("Couldn't load help banner:", e);
-        return message.reply(replyMsg);
-      }
+      return replyWithAutoUnsend(replyMsg);
     }
 
     let cmd = commands.get(commandName) || commands.get(aliases.get(commandName));
     if (!cmd) {
-      return message.reply(this.langs.en.commandNotFound.replace(/{command}/g, commandName));
+      return replyWithAutoUnsend(this.langs.en.commandNotFound.replace(/{command}/g, commandName));
     }
 
     const config = cmd.config;
@@ -170,6 +164,6 @@ module.exports = {
                 this.langs.en.usageBody.replace(/{usage}/g, guide.split("\n").join("\n ")) + "\n" +
                 this.langs.en.usageFooter;
 
-    return message.reply(replyMsg);
+    return replyWithAutoUnsend(replyMsg);
   }
 };
