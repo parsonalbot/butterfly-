@@ -1,6 +1,6 @@
 module.exports = {
   config: {
-    name: "top",
+    name: "top2",
     aliases: ["richlist"],
     version: "1.2",
     author: "xnil6x",
