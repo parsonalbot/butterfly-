@@ -21,8 +21,8 @@ module.exports = {
 		en: {
 			reset: "✅ Prefix reset to default:\n➡️  System prefix: %1",
 			onlyAdmin: "⛔ Only admin can change the system-wide prefix.",
-			confirmGlobal: "⚙️ Global prefix change requested.\n🪄 React to confirm.\n📷 See image below.",
-			confirmThisThread: "🛠️ Group prefix change requested.\n🪄 React to confirm.\n📷 See image below.",
+			confirmGlobal: "⚙️ Global prefix change requested.\n🪄 React to confirm.",
+			confirmThisThread: "🛠️ Group prefix change requested.\n🪄 React to confirm.",
 			successGlobal: "✅ Global prefix changed successfully!\n🆕 New prefix: %1",
 			successThisThread: "✅ Group prefix updated!\n🆕 New prefix: %1"
 		}
@@ -31,14 +31,11 @@ module.exports = {
 	onStart: async function ({ message, role, args, commandName, event, threadsData, getLang }) {
 		if (!args[0]) return message.SyntaxError();
 
-		const prefixImage = "https://i.ibb.co/Zzqz5nBx/file-00000000588061f6ac814c432f6c0273.png";
-
 		if (args[0] === "reset") {
 			await threadsData.set(event.threadID, null, "data.prefix");
-			return message.reply({
-				body: getLang("reset", global.GoatBot.config.prefix),
-				attachment: await global.utils.getStreamFromURL(prefixImage)
-			});
+			return message.reply(
+				getLang("reset", global.GoatBot.config.prefix)
+			);
 		}
 
 		const newPrefix = args[0];
@@ -54,10 +51,7 @@ module.exports = {
 
 		const confirmMsg = formSet.setGlobal ? getLang("confirmGlobal") : getLang("confirmThisThread");
 
-		return message.reply({
-			body: confirmMsg,
-			attachment: await global.utils.getStreamFromURL(prefixImage)
-		}, (err, info) => {
+		return message.reply(confirmMsg, (err, info) => {
 			formSet.messageID = info.messageID;
 			global.GoatBot.onReaction.set(info.messageID, formSet);
 		});
@@ -81,7 +75,6 @@ module.exports = {
 		if (event.body && event.body.toLowerCase() === "prefix") {
 			const systemPrefix = global.GoatBot.config.prefix;
 			const groupPrefix = utils.getPrefix(event.threadID);
-			const senderID = event.senderID;
 
 			const dateTime = new Date().toLocaleString("en-US", {
 				timeZone: "Asia/Dhaka",
@@ -96,19 +89,14 @@ module.exports = {
 			const [datePart, timePart] = dateTime.split(", ");
 
 			const infoBox = `
-╔═════ OBITO CHATBOT ════╗
+╔════ 𝖡𝗎𝗍𝗍𝖾𝗋𝖿𝗅𝗒 🎀 ══════╗
 🌐 System Prefix  : ${systemPrefix.padEnd(10)}
 💬 Group Prefix   : ${groupPrefix.padEnd(10)} 
 🕒 Time           : ${timePart.padEnd(10)} 
 📅 Date           : ${datePart.padEnd(10)}
 ╚══════════════════╝`;
 
-			const prefixImage = "https://i.ibb.co/Zzqz5nBx/file-00000000588061f6ac814c432f6c0273.png";
-
-			return message.reply({
-				body: infoBox,
-				attachment: await global.utils.getStreamFromURL(prefixImage)
-			});
+			return message.reply(infoBox);
 		}
 	}
 };
