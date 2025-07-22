@@ -47,6 +47,11 @@ module.exports = {
    return;
   }
 
+  if (betAmount > 10000000) {
+   await message.reply("❌ You can bet a maximum of 10,000,000 coins.");
+   return;
+  }
+
   const userData = await usersData.get(senderID) || {};
   userData.money = userData.money || 0;
   userData.data = userData.data || {};
