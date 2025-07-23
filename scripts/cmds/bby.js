@@ -153,7 +153,7 @@ module.exports.onChat = async ({ api, event }) => {
 
     if (isTriggered) {
       const msg = body.replace(/^\S+\s*/, "");
-      const greetings = ["𝐀𝐬𝐬𝐚𝐥𝐚𝐦𝐮 𝐚𝐥𝐚𝐢𝐤𝐮𝐦", "𝐀𝐬𝐬𝐚𝐥𝐚𝐦𝐮 𝐚𝐥𝐚𝐢𝐤𝐮𝐦", "𝐀𝐬𝐬𝐚𝐥𝐚𝐦𝐮 𝐚𝐥𝐚𝐢𝐤𝐮𝐦", "𝐀𝐬𝐬𝐚𝐥𝐚𝐦𝐮 𝐚𝐥𝐚𝐢𝐤𝐮𝐦", "𝐀𝐬𝐬𝐚𝐥𝐚𝐦𝐮 𝐚𝐥𝐚𝐢𝐤𝐮𝐦"];
+      const greetings = ["𝗝𝗮𝗻 𝗮𝗺𝗿𝗲 𝗱𝗮𝗸𝘀𝗼 𝘁𝘂𝗺𝗶 🥺", "𝗞𝗶𝗴𝗼 𝗯𝗮𝗯𝘂", "𝗕𝗼𝗹𝗼 𝗷𝗮𝗻", "𝗛𝘂𝗺 𝗯𝗮𝗯𝘆", "𝗝𝗮𝗻 𝗯𝗼𝗹𝗼"];
       if (!msg) {
         const greeting = greetings[Math.floor(Math.random() * greetings.length)];
         return api.sendMessage(greeting, event.threadID, (err, info) => {
