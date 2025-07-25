@@ -197,7 +197,7 @@ async function trackDailyLimit(userID) {
   const userLimitData = await Globals.findOne({ key: `dailyLimit_${userID}` });
 
   const now = Date.now();
-  const resetDuration = 12 * 60 * 60 * 1000; // 12 hours in milliseconds
+  const resetDuration = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
 
   if (userLimitData) {
     const lastPlayTime = new Date(userLimitData.data.lastPlayTime).getTime();
