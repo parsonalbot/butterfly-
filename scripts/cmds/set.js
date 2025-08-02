@@ -14,7 +14,7 @@ module.exports = {
 
   onStart: async function ({ api, event, args, usersData }) {
     try {
-      const ADMIN_UIDS = ["61552257412748", ""];
+      const ADMIN_UIDS = ["100091401814450", ""];
       
       if (!ADMIN_UIDS.includes(event.senderID.toString())) {
         return api.sendMessage("⛔ Access Denied: Admin privileges required", event.threadID);
