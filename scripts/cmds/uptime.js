@@ -7,7 +7,7 @@ const execPromise = util.promisify(exec);
 module.exports = {
     config: {
         name: 'uptime',
-        aliases: ["up", "state", "uptime"],
+        aliases: ["up", "state"],
         version: '1.6.9',
         author: "Nazrul",
         countDown: 5,
@@ -54,35 +54,47 @@ module.exports = {
     },
 
     onStart: async ({ api, event, usersData, threadsData }) => {
-        const [usage, allUsers, allThreads, diskSpaceInfo, cpuUsage] = await Promise.all([
-            pidusage(process.pid),
-            usersData.getAll(),
-            threadsData.getAll(),
-            module.exports.getDiskSpaceInfo(),
-            module.exports.getCpuUsage()
-        ]);
+        try {
+            const [usage, allUsers, allThreads, diskSpaceInfo, cpuUsage] = await Promise.all([
+                pidusage(process.pid),
+                usersData.getAll(),
+                threadsData.getAll(),
+                module.exports.getDiskSpaceInfo(),
+                module.exports.getCpuUsage()
+            ]);
 
-        const uptimeSeconds = Math.floor(process.uptime());
-        const systemUptime = os.uptime();
-        const totalUsers = 0 + allUsers.length;
-        const totalGroups = 0 + allThreads.length;
-        const totalMemory = module.exports.byte2mb(os.totalmem());
-        const freeMemory = module.exports.byte2mb(os.freemem());
-        const cpuModel = os.cpus()[0].model;
+            const uptimeSeconds = Math.floor(process.uptime());
+            const systemUptime = os.uptime();
+            const totalUsers = allUsers.length;
+            const totalGroups = allThreads.length;
+            const totalMemory = module.exports.byte2mb(os.totalmem());
+            const freeMemory = module.exports.byte2mb(os.freemem());
 
-        const msg = `
+            const cpuInfo = os.cpus();
+            const cpuModel = cpuInfo.length > 0 ? cpuInfo[0].model : 'N/A';
+            const cpuCores = cpuInfo.length;
+
+            let pkgCount = 0;
+            try {
+                const pkgJson = require(`${process.cwd()}/package.json`);
+                pkgCount = Object.keys(pkgJson.dependencies || {}).length;
+            } catch {
+                pkgCount = 'N/A';
+            }
+
+            const msg = `
 📅 Date: ${new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka", hour12: true })}
 
 🚀 Bot Uptime: ${module.exports.getUptime(uptimeSeconds)}
 🚀 System Uptime: ${module.exports.getUptime(systemUptime)}
 
 💻 CPU Usage: ${cpuUsage !== 'N/A' ? `${cpuUsage.toFixed(1)}%` : 'N/A'}
-💻 CPU Cores: ${os.cpus().length}
+💻 CPU Cores: ${cpuCores}
 💻 CPU Model: ${cpuModel}
 💻 RAM Usage: ${module.exports.byte2mb(usage.memory)} / ${totalMemory}
 💻 Free Memory: ${freeMemory}
 
-📦 Installed Packages: 70
+📦 Installed Packages: ${pkgCount}
 
 👥 Total Users: ${totalUsers}
 👥 Total Groups: ${totalGroups}
@@ -91,6 +103,9 @@ module.exports = {
 💾 Available Disk: ${diskSpaceInfo.available}
 `.trim();
 
-        api.sendMessage(msg, event.threadID, null, event.messageID);
+            api.sendMessage(msg, event.threadID, null, event.messageID);
+        } catch (err) {
+            api.sendMessage(`❌ Error fetching uptime info:\n${err.message}`, event.threadID, null, event.messageID);
+        }
     }
 };
