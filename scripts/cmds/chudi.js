@@ -6,7 +6,7 @@ module.exports = {
     aliases: ["chud"],
     version: "1.3",
     author: "nexo_here + fixed by Yeasin",
-    role: 4,
+    role: 2,
     category: "admin",
     guide: {
       en: "chud @mention to attack, chud off to stop"
