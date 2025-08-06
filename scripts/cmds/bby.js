@@ -3,7 +3,7 @@ const baseApiUrl = async () => "https://www.noobs-api.rf.gd/dipto";
 
 module.exports.config = {
   name: "bby",
-  aliases: ["baby", "bbe", "bot", "butterfly", "jan"],
+  aliases: ["baby", "bbe", "bot", "butterfly", "assalamualaikum"],
   version: "6.9.0",
   author: "dipto",
   countDown: 0,
@@ -148,7 +148,7 @@ module.exports.onReply = async ({ api, event }) => {
 module.exports.onChat = async ({ api, event }) => {
   try {
     const body = event.body?.toLowerCase() || "";
-    const triggers = ["baby", "bby", "বেবি", "bot", "butterfly", "babu", "jan"];
+    const triggers = ["baby", "bby", "বেবি", "bot", "butterfly", "babu", "assalamualaikum"];
     const isTriggered = triggers.some(prefix => body.startsWith(prefix));
 
     if (isTriggered) {
