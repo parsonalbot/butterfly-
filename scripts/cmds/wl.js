@@ -9,7 +9,7 @@ module.exports = {
     version: "1.5",
     author: "NTKhang",
     countDown: 5,
-    role: 0,
+    role: 2,
     description: {
       en: "Add, remove, edit whiteListIds role",
     },
